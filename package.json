@@ -15,7 +15,7 @@
     "scss",
     "svg",
     "inline",
-    "gulp"
+    "gulpplugin"
   ],
   "license": "MIT",
   "main": "index.js",

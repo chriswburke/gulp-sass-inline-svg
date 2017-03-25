@@ -15,19 +15,29 @@ const URI_PREFIX = 'data:image/svg+xml, ';
 
 module.exports = gulpSassInlineSvg;
 
+/**
+ * Convert svg file into a sass function and write to a scss file
+ * @param {object} options plugin options 
+ */
 function gulpSassInlineSvg(options) {
 	options = options || {};
-	options.outputFolder = options.outputFolder || "./scss";
-	options.outputMainFile = path.join(options.outputFolder, "_sass-inline-svg.scss");
-	options.outputDataFile = path.join(options.outputFolder, "_sass-inline-svg-data.scss");
+	options.destDir = options.destDir || "./scss";
 
-	var writeStreamMain = fs.createWriteStream(options.outputMainFile);
-	writeStreamMain.write(fs.readFileSync(__dirname + "/_sassvg.scss", "utf8"));
-	writeStreamMain.end();
+	// Create the output directory if it does not exist
+	if (!fs.existsSync(options.destDir)) {
+		fs.mkdirSync(options.destDir);
+	}
 
-	var writeStream = fs.createWriteStream(options.outputDataFile);
+	options.rootScss = path.join(options.destFolder, "_sass-inline-svg.scss");
+	options.dataScss = path.join(options.destFolder, "_sass-inline-svg-data.scss");
 
-	var svgMap = "\n\n$sassvg-map: (";
+	var writeStreamRoot = fs.createWriteStream(options.rootScss);
+	writeStreamRoot.write(fs.readFileSync(__dirname + "/_sass-inline-svg.scss", "utf8"));
+	writeStreamRoot.end();
+
+	var writeStream = fs.createWriteStream(options.dataScss);
+
+	var svgMap = "\n\n$svg-map: (";
 
 	function listStream(file, enc, cb) {
 		var dir = path.parse(file.path).dir.split(path.sep);
@@ -67,7 +77,9 @@ function svgToInlineSvg(writeStream, cb, filePath, svgString) {
 }
 
 /**
- * Enocde the svg string as a URI
+ * Enocde the svg string as a URI based on recommended optimization of data uri 
+ * strings for full cross browser support
+ * @see https://codepen.io/tigt/post/optimizing-svgs-in-data-uris
  * @param {string} svgString the html string of the inline svg		
  * @returns {string} the svg as a encoded uri string  
  */
@@ -130,12 +142,5 @@ function addVariables(filePath, fileContent) {
  * @returns (string) The sass function as a string 
  */
 function assembleDataString(fileName, inlineSvg) {
-	return '@function ' + fileName + '($fillcolor, $strokecolor){' + 
-		 		'@return "' + URI_PREFIX + inlineSvg + '"; ' + 
-		   '}\n';
-} 
-
-
-
-
-
+	return '@function ' + fileName + '($fillcolor, $strokecolor){ @return "' + URI_PREFIX + inlineSvg + '";}\n';
+}
