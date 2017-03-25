@@ -33,7 +33,7 @@ $SVG-URL: true !default;
 /// @return {color} (uri-encoded)
 @function uri-encode-color($color){
 	@if(alpha($color) != 1){
-		@return "rgba%28" + round(red($color)) + "%2C" + round(green($color)) + "%2C" + round(blue($color)) + "%2C" + round(alpha($color)) + "%29";
+		@return "rgba%28" + round(red($color)) + "%2C" + round(green($color)) + "%2C" + round(blue($color)) + "%2C" + (alpha($color)) + "%29";
 	}@else{
 		@return "rgb%28" + round(red($color)) + "%2C" + round(green($color)) + "%2C" + round(blue($color)) + "%29";
 	}
@@ -66,12 +66,14 @@ $SVG-URL: true !default;
 	$strokecolor: $color, 
 	$url: $SVG-URL
 ){
-	$functionname: "svg-" + $icon;
+	$functionname: $icon;
 
 	//some sanity checks
-	@if(type-of($icon) != "string" or (function-exists($functionname) == false)){
+	@if(type-of($icon) != "string"){
 		@warn "Could not find '#{$icon}', either the svg file does not exist or the name was mispelled.";
-	}@else{
+	} @else if (function-exists($functionname) == false) {
+		@warn "Function '#{$icon}' does not exist.";
+	} @else{
 		@if(type-of($color) == "color"){
 			$fillcolor: uri-encode-color($fillcolor);
 			$strokecolor: uri-encode-color($strokecolor);
@@ -86,9 +88,9 @@ $SVG-URL: true !default;
 
 		$uri-string: call($functionname, $fillcolor, $strokecolor);
 		@if $url {
-			@return $uri-string;
-		} @else {
 			@return url($uri-string);
+		} @else {
+			@return $uri-string;
 		}
 	}
 

@@ -8,7 +8,11 @@
     "through2": "^0.6.3"
   },
   "description": "Converts svg files into a sass function that can then be used as a inline svg for background-image. Based on gulp-sassvg",
-  "devDependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-svgmin": "^1.2.3"
+  },
   "directories": {},
   "keywords": [
     "sass",
@@ -22,7 +26,7 @@
   "name": "gulp-sass-inline-svg",
   "optionalDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "gulp --gulpfile ./tests/test.js"
   },
   "version": "1.0.0"
 }

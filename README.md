@@ -12,6 +12,10 @@ npm install gulp-sass-inling-svg --save-dev
 
 ## Basic Usage
 
+>**Note:** Currently sass-inline-svg does not support css classes used to style
+svgs but rather requires presentation attributes (.e.g fill, stroke, etc) When 
+exporting the svg make sure that you select the option to use presentation attributes.
+
 ```js
 // gulpfile.js
 var sassInlineSvg = require('gulp-sass-inline-svg');

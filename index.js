@@ -28,8 +28,8 @@ function gulpSassInlineSvg(options) {
 		fs.mkdirSync(options.destDir);
 	}
 
-	options.rootScss = path.join(options.destFolder, "_sass-inline-svg.scss");
-	options.dataScss = path.join(options.destFolder, "_sass-inline-svg-data.scss");
+	options.rootScss = path.join(options.destDir, "_sass-inline-svg.scss");
+	options.dataScss = path.join(options.destDir, "_sass-inline-svg-data.scss");
 
 	var writeStreamRoot = fs.createWriteStream(options.rootScss);
 	writeStreamRoot.write(fs.readFileSync(__dirname + "/_sass-inline-svg.scss", "utf8"));
