@@ -77,13 +77,10 @@ $SVG-URL: true !default;
 		@if(type-of($color) == "color"){
 			$fillcolor: uri-encode-color($fillcolor);
 			$strokecolor: uri-encode-color($strokecolor);
-		} @else if ($color == null){
-			$fillcolor: null;
-			$strokecolor: null;
-		}@else {
-			$fillcolor: uri-encode-color(#000);
-			$strokecolor: uri-encode-color(#000);
-			@warn "Color value is not valid, defaulting to #000. You can use 'null' to use the svg's original color";
+		} @else {
+			$fillcolor: uri-encode-color(#000000);
+			$strokecolor: uri-encode-color(#000000);
+			@warn "Color value for '#{$icon} was not set or is not a valid color, defaulting to rgba(0,0,0)";	
 		}
 
 		$uri-string: call($functionname, $fillcolor, $strokecolor);

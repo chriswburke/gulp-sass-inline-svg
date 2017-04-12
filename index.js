@@ -95,7 +95,7 @@ function encodeSVG(svgString) {
 		.replace(/%22/g, "'"); // replace quotes with apostrophes (may break certain SVGs)
 	
 	// Decode sass variables 
-	var regex = /(%23%7Bif).*?(%7D)/gm; // (#{if).*?(})/gm; in URI
+	var regex = /(%23%7B).*?(%7D)/gm; // (#{if).*?(})/gm; in URI
 	uriPayload = uriPayload.replace(regex, function(str) {
 		return decodeURIComponent(str);
 	});
@@ -122,15 +122,15 @@ function addVariables(filePath, fileContent) {
 	// Allow fill values that are black to be set with sass variable.
 	var $fills = $('[fill]').not('[fill=none]');
 	if ($fills.length > 0) {
-		var $fillsToChange = $('[fill="#000"], [fill="#0000"], [fill="rgb(0,0,0)"]');
-		$fillsToChange.attr('fill', '#{if($fillcolor, $fillcolor, %23000)}');
+		var $fillsToChange = $('[fill="#000"], [fill="#000000"], [fill="rgb(0,0,0)"]');
+		$fillsToChange.attr('fill', '#{$fillcolor}');
 	} else {
-		$('svg').attr('fill', '#{if($fillcolor, $fillcolor, %23000)}');
+		$('svg').attr('fill', '#{$fillcolor}');
 	}
 
 	// Allow stroke values that are black to be set with a sass variable 
 	var $strokes = $('[stroke="#000"], [stroke="#000000"], [stroke="rgb(0,0,0)"]');
-	$strokes.attr('stroke', '#{if($strokecolor, $strokecolor, %23000)}');
+	$strokes.attr('stroke', '#{$strokecolor}');
 
 	return $.html('svg'); //return only the svg 
 }
