@@ -5,7 +5,7 @@
 /// @see https://github.com/MattDiMu/gulp-sassvg
 ////
 
-// Import the generated inline svgs sass functions 
+// Import the generated inline svgs sass functions
 @import "sass-inline-svg-data";
 
 /// default color, if the inline-svg() mixin gets no color parameter
@@ -17,13 +17,13 @@ $SVG-COLOR: null !default;
 /// @example - all these examples return the same (valid) css/svg
 /// 	$SVG-URL: true;
 /// 	background-image: inline-svg("iconname", blue);
-/// 	
+///
 /// 	$SVG-URL: false;
 /// 	background-image: url(inline-svg("iconname", blue));
-/// 	
+///
 /// 	$SVG-URL: false;
 /// 	background-image: inline-svg("iconname", blue, $url: true);
-/// 	
+///
 /// 	$SVG-URL: true;
 /// 	background-image: url(inline-svg("iconname", blue, $url:false));
 $SVG-URL: true !default;
@@ -41,7 +41,7 @@ $SVG-URL: true !default;
 
 
 /// creates an inline svg. Black fill and strokes can by dynaically assigned a
-/// different color 
+/// different color
 ///
 /// @param {filename} $icon - name of the svg file
 /// @param {color} $color - color used for both black fill and stroke attributes
@@ -55,15 +55,15 @@ $SVG-URL: true !default;
 ///
 /// @example
 /// 	background-image: inline-svg("iconname", blue);
-/// 	background-image: inline-svg("facebook", #FFAFF ); 
-/// 	background-image: inline-svg("arrow-left", rgba(224, 51, 224, 0.79)); 
+/// 	background-image: inline-svg("facebook", #FFAFF );
+/// 	background-image: inline-svg("arrow-left", rgba(224, 51, 224, 0.79));
 ///
 /// @return {image} - uri encoded svg to be used as a background-url
 @function inline-svg(
-	$icon, 
-	$color: $SVG-COLOR, 
+	$icon,
+	$color: $SVG-COLOR,
 	$fillcolor: $color,
-	$strokecolor: $color, 
+	$strokecolor: $color,
 	$url: $SVG-URL
 ){
 	$functionname: $icon;
@@ -86,7 +86,7 @@ $SVG-URL: true !default;
 			@warn "Color value is not valid, defaulting to #000. You can use 'null' to use the svg's original color";
 		}
 
-		$uri-string: call($functionname, $fillcolor, $strokecolor);
+		$uri-string: call(get-function($functionname), $fillcolor, $strokecolor);
 		@if $url {
 			@return url($uri-string);
 		} @else {
@@ -109,13 +109,13 @@ $SVG-URL: true !default;
 /// 	}
 ///
 /// @example css - then it will generate css like this
-/// 	
+///
 /// 	.social-facebook {
 /// 		background-image: url(data:image/svg+xml...);
 /// 	}
 /// 	.social-twitter {
 /// 		background-image: url(data:image/svg+xml...);
-/// 	} 	
+/// 	}
 ///
 @function svg-list($folder: null){
 	$iconlist: ();
@@ -129,20 +129,20 @@ $SVG-URL: true !default;
 }
 
 /// convenience mixin for creating a svg icon with usefull default values
-/// @param {filename} $icon - filename of the svg icon 
-/// @param {color} $color - color to apply to black fills and strokes 
+/// @param {filename} $icon - filename of the svg icon
+/// @param {color} $color - color to apply to black fills and strokes
 /// @param {background-position} $position - sets the background position
 /// @param {background-size} $size - sets the background-size property
 /// @param {background-repeat} $repeat - sets the background-repeat property
 /// @param {color} $fillcolor - color to apply to black fill attributes
-/// @param {strokecolor} $strokecolor - color to apply to black stroke attributes 
+/// @param {strokecolor} $strokecolor - color to apply to black stroke attributes
 /// @require {function} inline-svg
 /// @example scss
-/// 	
+///
 /// 	.icon-selector {
 /// 		@include inline-svg-icon("filename", blue);
 /// 	}
-/// 
+///
 /// 	...generates..
 /// 	.selector {
 /// 		background-image: url("data:image/svg+xml...");
@@ -153,13 +153,13 @@ $SVG-URL: true !default;
 ///
 @mixin inline-svg-icon(
 	$icon,
-	$color: $SVG-COLOR, 
-	$position: 0 50%, 
-	$size: 2rem 2rem, 
-	$repeat: no-repeat, 
-	$fillcolor: $color, 
+	$color: $SVG-COLOR,
+	$position: 0 50%,
+	$size: 2rem 2rem,
+	$repeat: no-repeat,
+	$fillcolor: $color,
 	$strokecolor: $color
-) { 
+) {
 	background-image: inline-svg($icon, $color, $fillcolor, $strokecolor, $url: true);
 	@if(type-of($repeat) == string) { $repeat: unquote($repeat); }
 	@if(type-of($position) == string) { $position: unquote($position); }

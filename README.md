@@ -1,4 +1,8 @@
 # gulp-sass-inling-svg
+
+Updated to support Sass 3.5+ `get-function` requirements
+
+---
 Gulp plugin for converting svg files into sass functions in order inline svgs in
 your css files and use as background-image icons. Based on the gulp plugin
 [gulp-sassvg](https://github.com/MattDiMu/gulp-sassvg) and follows recommendations
@@ -13,7 +17,7 @@ npm install gulp-sass-inling-svg --save-dev
 ## Basic Usage
 
 >**Note:** Currently sass-inline-svg does not support css classes used to style
-svgs but rather requires presentation attributes (.e.g fill, stroke, etc) When 
+svgs but rather requires presentation attributes (.e.g fill, stroke, etc) When
 exporting the svg make sure that you select the option to use presentation attributes.
 
 ```js
@@ -22,7 +26,7 @@ var sassInlineSvg = require('gulp-sass-inline-svg');
 var svgmin = require('gulp-svgmin');
 
 gulp.task('sass:svg', function(){
-    return gulp.src('./path/to/svgs/folder/**/*.svg') 
+    return gulp.src('./path/to/svgs/folder/**/*.svg')
       .pipe(svgmin()) // Recommend using svg min to optimize svg files first
       .pipe(sassInlineSvg({
         destDir: './icons'
@@ -39,7 +43,7 @@ gulp.task('sass:svg', function(){
 }
 
 .icon-facebook {
-  background: url( inline-svg("facebook", #FFAFF, $url:false) ) no-repeat; 
+  background: url( inline-svg("facebook", #FFAFF, $url:false) ) no-repeat;
 }
 
 .icon-arrow-left {
@@ -64,9 +68,9 @@ gulp.task('sass:svg', function(){
 }
 ```
 
-## Icon Mixin 
+## Icon Mixin
 ```scss
-// sass file 
+// sass file
 
 @import "sass-inline-svg.scss";
 
@@ -88,18 +92,18 @@ gulp.task('sass:svg', function(){
 
 ## Automatically create classes for svg icons
 ```scss
-// sass file 
+// sass file
 
 @import "sass-inline-svg.scss";
 
 // folder that your icons are in. If you have multiple folders with svg icons,
 // you will want to repeat this for each group (folder) of icons.
 
-$folder: "icons"; 
+$folder: "icons";
 @each $icon in svg-list($folder){
   $url: inline-svg($icon, #1a1ab4);
-  
-  // Use whatever prefix you'd like on your icons, we are using $folder here by 
+
+  // Use whatever prefix you'd like on your icons, we are using $folder here by
   // default
   .#{$folder}-#{$icon} {
       background-image: $url;
