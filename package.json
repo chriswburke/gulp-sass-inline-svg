@@ -5,6 +5,7 @@
   "dependencies": {
     "cheerio": "^0.19.0",
     "gulp-util": "^3.0.4",
+    "signale": "^1.2.1",
     "through2": "^0.6.3"
   },
   "description": "Converts svg files into a sass function that can then be used as a inline svg for background-image. Based on gulp-sassvg",
