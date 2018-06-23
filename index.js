@@ -4,7 +4,7 @@
  * Dependencies
  */
 var through = require('through2');
-var gutil = require('gulp-util');
+var signale = require('signale');
 var fs = require('fs');
 var path = require('path');
 var cheerio = require('cheerio');
@@ -17,7 +17,7 @@ module.exports = gulpSassInlineSvg;
 
 /**
  * Convert svg file into a sass function and write to a scss file
- * @param {object} options plugin options 
+ * @param {object} options plugin options
  */
 function gulpSassInlineSvg(options) {
 	options = options || {};
@@ -60,15 +60,15 @@ function gulpSassInlineSvg(options) {
 
 /**
  * Convert svg string to inline svg with sass variables
- * @param {*} writeStream 
- * @param {*} cb 
- * @param {*} filePath 
- * @param {*} svgString 
+ * @param {*} writeStream
+ * @param {*} cb
+ * @param {*} filePath
+ * @param {*} svgString
  */
 function svgToInlineSvg(writeStream, cb, filePath, svgString) {
 	var inlineSvg = encodeSVG(addVariables(filePath, svgString));
 	var fileName = path.parse(filePath).name;
-	var uriString = 
+	var uriString =
 
 	writeStream.write(
 		assembleDataString(fileName, inlineSvg)
@@ -77,11 +77,11 @@ function svgToInlineSvg(writeStream, cb, filePath, svgString) {
 }
 
 /**
- * Enocde the svg string as a URI based on recommended optimization of data uri 
+ * Enocde the svg string as a URI based on recommended optimization of data uri
  * strings for full cross browser support
  * @see https://codepen.io/tigt/post/optimizing-svgs-in-data-uris
- * @param {string} svgString the html string of the inline svg		
- * @returns {string} the svg as a encoded uri string  
+ * @param {string} svgString the html string of the inline svg
+ * @returns {string} the svg as a encoded uri string
  */
 function encodeSVG(svgString) {
 	var uriPayload = svgString.replace(/\n+/g, ''); // remove newlines
@@ -93,8 +93,8 @@ function encodeSVG(svgString) {
 		.replace(/%3A/g, ':') // ditto colons
 		.replace(/%2F/g, '/') // ditto slashes
 		.replace(/%22/g, "'"); // replace quotes with apostrophes (may break certain SVGs)
-	
-	// Decode sass variables 
+
+	// Decode sass variables
 	var regex = /(%23%7B).*?(%7D)/gm; // (#{if).*?(})/gm; in URI
 	uriPayload = uriPayload.replace(regex, function(str) {
 		return decodeURIComponent(str);
@@ -104,10 +104,10 @@ function encodeSVG(svgString) {
 }
 
 /**
- * Swaps fill and stroke attributes with a value of black of an svg file to sass 
+ * Swaps fill and stroke attributes with a value of black of an svg file to sass
  * variables so that we can change the color with sass.
- * @param {String} filePath The file path 
- * @param {String} fileContent HTML/XML string 
+ * @param {String} filePath The file path
+ * @param {String} fileContent HTML/XML string
  */
 function addVariables(filePath, fileContent) {
 	var $ = cheerio.load(fileContent, {
@@ -116,7 +116,7 @@ function addVariables(filePath, fileContent) {
 	});
 
 	if ($('svg').length !== 1) {
-		throw new gutil.PluginError(PLUGIN_NAME, "File at '" + filePath + "' is not a valid svg file");
+		signale.fatal(new Error("File at '" + filePath + "' is not a valid svg file"));
 	}
 
 	// Allow fill values that are black to be set with sass variable.
@@ -128,18 +128,18 @@ function addVariables(filePath, fileContent) {
 		$('svg').attr('fill', '#{$fillcolor}');
 	}
 
-	// Allow stroke values that are black to be set with a sass variable 
+	// Allow stroke values that are black to be set with a sass variable
 	var $strokes = $('[stroke="#000"], [stroke="#000000"], [stroke="rgb(0,0,0)"]');
 	$strokes.attr('stroke', '#{$strokecolor}');
 
-	return $.html('svg'); //return only the svg 
+	return $.html('svg'); //return only the svg
 }
 
 /**
- * Create a sass function that will return the URI for the inline svg 
- * @param {string} fileName The name of the svg file 
+ * Create a sass function that will return the URI for the inline svg
+ * @param {string} fileName The name of the svg file
  * @param {string} inlineSvg The encoded svg string
- * @returns (string) The sass function as a string 
+ * @returns (string) The sass function as a string
  */
 function assembleDataString(fileName, inlineSvg) {
 	return '@function ' + fileName + '($fillcolor, $strokecolor){ @return "' + URI_PREFIX + inlineSvg + '";}\n';
