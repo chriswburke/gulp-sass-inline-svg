@@ -1,4 +1,4 @@
-# gulp-sass-inling-svg
+# gulp-sass-inline-svg
 
 Updated to support Sass 3.5+ `get-function` requirements
 
@@ -11,7 +11,7 @@ for [optimizing inline svgs for full browser support](https://codepen.io/tigt/po
 ## Install
 
 ```bash
-npm install gulp-sass-inling-svg --save-dev
+npm install gulp-sass-inline-svg --save-dev
 ```
 
 ## Basic Usage
