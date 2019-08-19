@@ -11,10 +11,10 @@ gulp.task('icons', function(){
     .pipe(inlinesvg());
 })
 
-gulp.task('sass', ['icons'], function(){
-  return gulp.src('test.scss')
+gulp.task('sass', gulp.series('icons', function(){
+  return gulp.src('test.css')
     .pipe(sass())
     .pipe(gulp.dest('.'));
-})
+}))
 
-gulp.task('default', ['sass']);
+gulp.task('default', gulp.series('sass'));
