@@ -2,9 +2,10 @@
   display: inline-block;
   width: 2rem;
   height: 2rem; }
-  .icon-lg {
-    width: 3rem;
-    height: 3rem; }
+
+.icon-lg {
+  width: 3rem;
+  height: 3rem; }
 
 .icon-a-commodity {
   background-image: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle fill='%23FFF' cx='32' cy='32' r='29'/%3E%3Cpath fill='%236E787B' d='M14.7 14.7h34.7v8H14.7zM12 42.7h20V48H12z'/%3E%3Cpath fill='%230084A9' d='M2.7 30.6h58.7V36H2.7z'/%3E%3Cpath fill='%23AAB4B7' d='M61.2 34.9c-14.2.9-25.7 12.2-26.9 26.3 14.3-.9 25.7-12.1 26.9-26.3z'/%3E%3Cpath fill='%235A6467' d='M35 61.3l-2.1.1c.7-7.7 4.2-14.9 9.5-19.9 4.9-4.6 12-7.7 19.3-8.2l-.4 2c-13.8 1-25.2 12.5-26.3 26z'/%3E%3Cpath fill='%23495963' d='M32 2.7c16.2 0 29.3 13.2 29.3 29.3S48.2 61.3 32 61.3 2.7 48.2 2.7 32 15.8 2.7 32 2.7M32 0C14.3 0 0 14.3 0 32s14.3 32 32 32 32-14.3 32-32S49.7 0 32 0z'/%3E%3C/svg%3E"); }
