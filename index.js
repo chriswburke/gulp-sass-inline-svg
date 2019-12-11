@@ -12,7 +12,6 @@ var cheerio = require('cheerio');
 const PLUGIN_NAME = 'gulp-sass-inline-svg';
 const URI_PREFIX = 'data:image/svg+xml, ';
 
-
 module.exports = gulpSassInlineSvg;
 
 /**
@@ -31,14 +30,15 @@ function gulpSassInlineSvg(options) {
 	options.rootScss = path.join(options.destDir, "_sass-inline-svg.scss");
 	options.dataScss = path.join(options.destDir, "_sass-inline-svg-data.scss");
 
-	var writeStreamRoot = fs.createWriteStream(options.rootScss);
-	writeStreamRoot.write(fs.readFileSync(__dirname + "/_sass-inline-svg.scss", "utf8"));
-	writeStreamRoot.end();
+	var copyMainScssPromise = new Promise(resolve => {
+		var stream = fs.createWriteStream(options.rootScss);
+		stream.write(fs.readFileSync(__dirname + "/_sass-inline-svg.scss", "utf8"));
+		stream.end(resolve);
+	});
 
 	var writeStream = fs.createWriteStream(options.dataScss);
-
 	var svgMap = "\n\n$svg-map: (";
-
+	
 	function listStream(file, enc, cb) {
 		var dir = path.parse(file.path).dir.split(path.sep);
 		var folderName = dir.pop();
@@ -46,16 +46,25 @@ function gulpSassInlineSvg(options) {
 		svgMap += "'" + fileName + "': ('name': '" + fileName + "', 'folder': '" + folderName + "'),";
 
 		svgToInlineSvg(writeStream, cb, file.path, String(file.contents));
-
 	}
 
-	function endStream(cb) {
-		svgMap += ");";
-		writeStream.write(svgMap);
-		writeStream.end();
-		cb();
+	function endStream() {
+		return new Promise(resolve => {
+			svgMap += ");";
+			writeStream.write(svgMap);
+			writeStream.end(resolve);
+		});
 	}
-	return through.obj(listStream, endStream);
+
+	function flushCallback(cb) {
+		Promise.all([
+			endStream(),
+			copyMainScssPromise
+		])
+		.then(() => cb());
+	}
+
+	return through.obj(listStream, flushCallback);
 }
 
 /**
@@ -68,7 +77,6 @@ function gulpSassInlineSvg(options) {
 function svgToInlineSvg(writeStream, cb, filePath, svgString) {
 	var inlineSvg = encodeSVG(addVariables(filePath, svgString));
 	var fileName = path.parse(filePath).name;
-	var uriString =
 
 	writeStream.write(
 		assembleDataString(fileName, inlineSvg)
